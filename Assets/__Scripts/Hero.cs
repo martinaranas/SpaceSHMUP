@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Hero : MonoBehaviour {
 
 	static public Hero		S;
 
+	public float	gameRestartDelay = 2f;
 	public float	speed = 30;
 	public float	rollMult = -45;
 	public float  	pitchMult=30;
@@ -80,13 +81,15 @@ public class Hero : MonoBehaviour {
 
 	public float shieldLevel {
 		get {
-			return {_shieldLevel);
+			return ( _shieldLevel);
 		}
 		set {
 				_shieldLevel = Mathf.Min(value, 4);
 				// If the shield is going to be set less than zero
 				if (value < 0) {
 					Destroy(this.gameObject);
+					// Tell Main.S to restart the game after a delay
+					Main.S.DelayedRestart(gameRestartDelay);
 				}
 			}
 		}

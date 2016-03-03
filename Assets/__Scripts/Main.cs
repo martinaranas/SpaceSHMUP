@@ -1,16 +1,19 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class Main : MonoBehaviour {
 	static public Main S;
 
-	public GameObject[]		prefabEnemies;
-	public float			enemySpawnPerSecond = 0.5f; //#enemies/second
-	public float			enemySpawnPadding = 1.5f; //padding for position
+	public GameObject[]			prefabEnemies;
+	public float				enemySpawnPerSecond = 0.5f; //#enemies/second
+	public float				enemySpawnPadding = 1.5f; //padding for position
+	public WeaponDefinition []	weaponDefinitions;
 
-	public bool				_______;
-	public float			enemySpawnRate; //Delay between Enemy spawns
+	public bool					_______;
+
+	public WeaponType[]			activeWeaponTypes;
+	public float				enemySpawnRate; //Delay between Enemy spawns
 
 	void Awake() {
 		S = this;
@@ -20,6 +23,13 @@ public class Main : MonoBehaviour {
 		enemySpawnRate = 1f / enemySpawnPerSecond;
 		// Invoke call SpawnEnemy() once after a 2 second delay
 		Invoke ("SpawnEnemy", enemySpawnRate);
+	}
+
+	void Start(){
+		activeWeaponTypes = new WeaponType[weaponDefinitions.Length];
+		for (int i=0; i<weaponDefinitions.Length; i++) {
+			activeWeaponTypes [i] = weaponDefinitions [i].type;
+		}
 	}
 
 	public void Spawnenemy(){
@@ -35,6 +45,15 @@ public class Main : MonoBehaviour {
 		go.transform.position = pos;
 		// Call SpawnEnemy() again in a couple of seconds
 		Invoke ("SpawnEnemy", enemySpawnRate);
+	}
+
+	public void DelayedRestart (float delay){
+		//Invoke the Restart () method in delay seconds
+		Invoke ("Restart", delay);
+	}
+	public void Restart() {
+		// Reload_Scene_0 to restart the game
+		Application.LoadLevel ("_Scene_0");
 	}
 }
 
